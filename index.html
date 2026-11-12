@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joey Beauvais-Feisthauer</title>
+<meta name="description" content="Mathematician turned systems programmer: Rust, CUDA and HPC. Computed the Adams E2 page through stem 400 on up to 45 GPUs.">
+<meta property="og:title" content="Joey Beauvais-Feisthauer">
+<meta property="og:description" content="Mathematician turned systems programmer: Rust, CUDA and HPC. Computed the Adams E2 page through stem 400 on up to 45 GPUs.">
+<meta property="og:image" content="https://joeybf.phd/img/avatar.jpg">
+<meta property="og:url" content="https://joeybf.phd/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>window.__resources = {
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "./vendor/react.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "./vendor/react-dom.production.min.js"
+};</script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+:root {
+  --bg: #0b0d0c; --fg: #c4ccc4; --dim: #7a857a; --bright: #e8ede8;
+  --accent: #4ade80; --link: #4ade80; --link-hover: #86efac; --visited: #4ade80;
+  --rule: #2a332b; --mono: "Berkeley Mono", ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  --body-font: var(--mono); --mono-ui: var(--mono);
+  --fs: 15px; --lh: 1.65; --maxw: 720px; --wrap-margin: 0 auto; --pad: 48px 24px 80px;
+  --h1-fs: 30px; --h1-margin: 6px 0 4px; --h1-ls: -0.02em;
+  --h2-fs: 17px; --h2-margin: 0 0 14px; --meta-fs: 13px; --small-fs: 13.5px; --foot-fs: 12.5px;
+  --hacker-only: inline; --web1-only: none; --canvas-display: block; --sidebar-display: flex;
+  --header-display: flex; --nav-display: flex;
+  --ul-display: flex; --ul-margin: 0; --ul-pad: 22px; --li-gap: 8px;
+  --dl-display: block; --dd-margin: 0;
+  --hr-style: solid; --hr-width: 1px 0 0 0; --hr-color: var(--rule); --hr-margin: 36px 0;
+  --btn-ff: var(--mono); --btn-fs: 12px; --btn-pad: 5px 12px; --btn-border: 1px solid var(--rule); --btn-bg: rgba(11,13,12,0.6); --btn-color: #7a857a; --btn-radius: 2px;
+  --code-color: var(--accent); --card-border: 1px solid var(--rule); --card-bg: rgba(15,20,16,0.55); --card-radius: 4px;
+  --dl-display: grid;
+}
+body[data-theme="web1"] {
+  --bg: #ffffff; --fg: #000000; --dim: #000000; --bright: #000000;
+  --accent: #0000ee; --link: #0000ee; --link-hover: #0000ee; --visited: #551a8b;
+  --body-font: "Times New Roman", Times, serif; --mono-ui: "Times New Roman", Times, serif;
+  --fs: 16px; --lh: normal; --maxw: none; --wrap-margin: 0; --pad: 8px;
+  --h1-fs: 2em; --h1-margin: 0.67em 0; --h1-ls: normal;
+  --h2-fs: 1.5em; --h2-margin: 0.83em 0; --meta-fs: small; --small-fs: small; --foot-fs: small;
+  --hacker-only: none; --web1-only: inline; --canvas-display: none; --sidebar-display: none;
+  --header-display: block; --nav-display: block;
+  --ul-display: block; --ul-margin: 1em 0; --ul-pad: 40px; --li-gap: 0;
+  --dl-display: block; --dd-margin: 0 0 0.6em 40px;
+  --hr-style: inset; --hr-width: 1px; --hr-color: #eee; --hr-margin: 0.5em auto;
+  --btn-ff: sans-serif; --btn-fs: 13.3px; --btn-pad: 2px 8px; --btn-border: 1px outset #ccc; --btn-bg: #efefef; --btn-color: #000; --btn-radius: 3px;
+  --code-color: #000; --card-border: 1px solid #999; --card-bg: #ffffff; --card-radius: 0px;
+}
+html, body { margin: 0; padding: 0; background: var(--bg); }
+html[data-theme="web1"], html:has(> body[data-theme="web1"]) { background: #ffffff; }
+body { font-family: var(--body-font); color: var(--fg); }
+html { scroll-behavior: smooth; }
+a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
+a:visited { color: var(--visited); }
+a.ref { text-decoration-style: dotted; }
+a:hover { color: var(--link-hover); }
+body:not([data-theme="web1"]) a:hover { background: rgba(74,222,128,0.14); }
+body:not([data-theme="web1"]) ::selection { background: #4ade80; color: #0b0d0c; }
+@media (max-width: 1240px) { [data-sidebar] { display: none !important; } }
+body[data-theme="web1"] .portrait-box { float: right; margin: 0 0 8px 16px; }
+body[data-theme="web1"] header::after { content: ""; display: block; clear: both; }
+.gallery { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; }
+@media (max-width: 600px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } .gallery a.fig:last-child { grid-column: span 2; } }
+@media (max-width: 600px) { .gallery.two a.fig:last-child { grid-column: auto; } }
+a.fig { display: block; text-decoration: none; color: var(--dim); font-size: 11.5px; line-height: 1.35; }
+a.fig img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: contain; object-position: center; background: #fbfcfd; border: var(--card-border); border-radius: var(--card-radius); margin-bottom: 4px; }
+body:not([data-theme="web1"]) a.fig:hover { background: none; color: var(--fg); }
+body:not([data-theme="web1"]) a.fig img { filter: invert(0.93) hue-rotate(180deg); }
+body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
+.chart-frame { height: 440px; }
+@media (max-width: 600px) { .chart-frame { height: 320px; } }
+.touch-hint { display: none; }
+@media (hover: none) and (pointer: coarse) { .key-hint { display: none; } .touch-hint { display: inline; } }
+</style>
+</helmet>
+
+<canvas ref="{{ canvasRef }}" style="position: fixed; inset: 0; width: 100vw; height: 100vh; display: var(--canvas-display); z-index: 0; pointer-events: none"></canvas>
+
+<nav data-sidebar style="position: fixed; top: 150px; left: max(24px, calc(50% - 555px)); z-index: 5; display: var(--sidebar-display); flex-direction: column; gap: 9px; font-family: var(--mono); font-size: 12px">
+  <sc-for list="{{ sideNav }}" as="item" hint-placeholder-count="6">
+    <a href="#{{ item.id }}" style="color: {{ item.color }}; text-decoration: none; white-space: pre" style-hover="color: #e8ede8">{{ item.marker }}{{ item.label }}</a>
+  </sc-for>
+</nav>
+
+<div style="min-height: 100vh; padding: var(--pad); position: relative; z-index: 1">
+<div style="max-width: var(--maxw); margin: var(--wrap-margin); font-size: var(--fs); line-height: var(--lh)">
+
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 24px">
+    <button onClick="{{ toggleTheme }}" style="background: var(--btn-bg); border: var(--btn-border); color: var(--btn-color); font-family: var(--btn-ff); font-size: var(--btn-fs); padding: var(--btn-pad); cursor: pointer; white-space: nowrap; border-radius: var(--btn-radius)" style-hover="color: var(--bright)">{{ toggleLabel }}</button>
+  </div>
+
+  <header data-screen-label="Header" style="display: var(--header-display); gap: 28px; align-items: flex-start; flex-wrap: wrap">
+    <div class="portrait-box" style="flex: 0 0 auto; order: 2">
+      <img src="img/avatar.jpg" alt="Joey Beauvais-Feisthauer at his PhD commencement" style="display: block; width: 231px; height: calc(231px * 1.6180339887); object-fit: cover; border-radius: 4px">
+    </div>
+    <div style="flex: 1 1 380px; min-width: 300px">
+      <div onClick="{{ openTerm }}" title="click for a shell" style="display: var(--hacker-only); color: var(--dim); font-size: 13px; font-family: var(--mono); cursor: pointer" style-hover="color: #4ade80">~/joeybf&nbsp;<span style="color: #2a332b">&#9608;</span></div>
+      <h1 style="color: var(--bright); font-size: var(--h1-fs); line-height: 1.2; margin: var(--h1-margin); font-weight: 700; letter-spacing: var(--h1-ls)">Joey Beauvais&#8209;Feisthauer</h1>
+      <div style="color: var(--dim); font-size: var(--meta-fs); margin-bottom: 14px">PhD &middot; he/him &middot; Qu&eacute;bec City, QC</div>
+      <p style="margin: 0 0 16px; color: var(--fg)">Mathematician turned systems programmer. I compute things that were previously considered uncomputable, then make the computer do it as fast as physics allows. Most recently: computed the Adams E&#8322; page through stem 400 on a cluster of up to 45 GPUs, in Rust and CUDA, with a matrix multiply over &#120125;&#8322; that runs at 10 quadrillion bit operations per second on one GPU.</p>
+      <nav style="display: var(--nav-display); gap: 8px 18px; flex-wrap: wrap; font-size: 14px; font-family: var(--mono-ui)">
+        <a href="mailto:joey@joeybf.phd">joey@joeybf.phd</a>
+
+        <span style="display: var(--web1-only)">|</span>
+        <a href="https://github.com/JoeyBF">github.com/JoeyBF</a>
+        <span style="display: var(--web1-only)">|</span>
+        <a href="https://www.linkedin.com/in/joeybf/">linkedin</a>
+        <span style="display: var(--web1-only)">|</span>
+        <a href="https://orcid.org/0000-0002-2727-1279">orcid</a>
+        <span style="display: var(--web1-only)">|</span>
+        <a href="uploads/Resume_joeybf.pdf" download="Resume_joeybf.pdf">resume.pdf&nbsp;&darr;</a>
+      </nav>
+    </div>
+  </header>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="now" data-screen-label="Now">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>Now</h2>
+    <ul style="margin: var(--ul-margin); padding-left: var(--ul-pad); display: var(--ul-display); flex-direction: column; gap: var(--li-gap)">
+      <li>Finished November 5, 2026: the Adams E&#8322; page of the sphere at p&nbsp;=&nbsp;2 through <strong style="color: var(--bright)">stem 400</strong> (s&nbsp;&le;&nbsp;202), well past the previous best chart (Wu, t&nbsp;&le;&nbsp;350). It took a 37-day, ~25,000 GPU-hour run on up to 45 GPUs of four kinds, on <a class="ref" href="https://computing.wayne.edu/hpc">Wayne State&rsquo;s HPC Grid</a>. <a href="#talks">Talk</a> and <a href="#projects">chart</a>. Next up: products and the d&#8322; differentials.</li>
+      <li>Lead developer of the <a href="https://github.com/SpectralSequences/sseq">SpectralSequences project</a> &mdash; high-performance machinery for computational stable homotopy theory.</li>
+      <li>Building <a href="https://github.com/JoeyBF/SeqSee">SeqSee</a>, an interactive spectral sequence visualizer used by top researchers in the field.</li>
+      <li>Freshly minted PhD (2025), open to interesting problems &mdash; especially if they involve high performance and lots of hardware.</li>
+    </ul>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="projects" data-screen-label="Projects">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>Projects</h2>
+
+    <div style="display: flex; flex-direction: column; gap: 26px">
+      <article>
+        <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
+          <h3 style="margin: 0; font-size: 15px; color: var(--bright); font-family: var(--mono-ui); font-weight: 700"><a href="#talks" style="color: var(--bright)">Ext to stem 400</a></h3>
+          <span style="color: var(--dim); font-size: var(--meta-fs); font-family: var(--mono-ui)">Rust &middot; CUDA &middot; built on sseq &middot; 2026</span>
+        </div>
+        <p style="margin: 8px 0 0">Computing the <a class="ref" href="https://en.wikipedia.org/wiki/Homotopy_groups_of_spheres">stable homotopy groups of spheres</a> is arguably the most central problem in stable homotopy theory. The best tool for it, the <a class="ref" href="https://en.wikipedia.org/wiki/Adams_spectral_sequence">Adams spectral sequence</a>, starts from a table (its E&#8322; page) with a long tradition of being pushed further and further. This run pushes it through stem 400, far past the previous best.</p>
+        <p style="margin: 8px 0 0; color: var(--dim)">In all: 37 days, up to 45 GPUs, ~18 quadrillion Milnor products and ~1.2 sextillion bit operations of row reduction.</p>
+        <ul style="margin: var(--ul-margin); padding-left: var(--ul-pad); display: var(--ul-display); flex-direction: column; gap: 6px; margin-top: 8px">
+          <li>Distributed the core algorithm across up to 45 GPUs of four kinds (H200, L40S, V100, A30) on a shared HPC cluster: one coordinator, stateless workers scheduled through <a class="ref" href="https://slurm.schedmd.com/">Slurm</a>, row reduction as a service. On a benchmark workload: <strong style="color: var(--bright)">205.5&nbsp;h on one node &rarr; 28.3&nbsp;h on 23 GPUs</strong>.</li>
+          <li>Found structure in the mathematics that exposes far more parallel work. Inside each step, the dependency graph grows exponentially wide but only polynomially deep. Between steps, the algebra allows a relaxation that halves the critical path. Together they took the run from ~20 GPUs&rsquo; worth of parallelism to ~190.</li>
+          <li>Row reduction over &#120125;&#8322;, built on the GPU matrix multiply below: <strong style="color: var(--bright)">a 1,048,576&nbsp;&times;&nbsp;1,048,576 matrix (137&nbsp;GB) in 12 minutes</strong> on one H200, against ~35 hours extrapolated for the best CPU code. Production results are verified by <a class="ref" href="https://en.wikipedia.org/wiki/Freivalds%27_algorithm">Freivalds checks</a>.</li>
+          <li>Successive rewrites of the hottest GPU kernel: ~37&times; on a fixed batch of work. The last one prunes its search space instead of brute-forcing it, with 2.4&times; less state per thread and device memory from 90&nbsp;GB to under 2&nbsp;GB, which let older 16&nbsp;GB cards join the run.</li>
+          <li>Traded storage for recompute: <strong style="color: var(--bright)">12&nbsp;PB projected on disk &rarr; ~100&nbsp;GB</strong>, and faster, because the parallel filesystem had been the bottleneck. Peak memory went from over 700&nbsp;GB (out-of-memory kills) to 45&nbsp;GB.</li>
+          <li>Fault-tolerant on a shared cluster: over the 37-day run, workers came and went as their allocations ended and restarted, with checkpoint/restart throughout, and the coordinator was upgraded live ~20 times without losing completed work.</li>
+        </ul>
+        <div class="gallery">
+          <a class="fig" href="img/census-node-vs-fleet.png" target="_blank" rel="noopener"><img src="img/census-node-vs-fleet.png" alt="Stems 0 to 300 with s up to 202: 205.5 hours on one 4-GPU node versus 28.3 hours on 23 GPUs (8 H200 and 15 L40S)" loading="lazy" />one node vs 23 GPUs</a>
+          <a class="fig" href="img/n400-progress.png" target="_blank" rel="noopener"><img src="img/n400-progress.png" alt="Bidegrees above stem 300 completed over time, October 2 to November 5, steepening sharply after October 29" loading="lazy" />Oct 2 → Nov 5</a>
+          <a class="fig" href="img/row-reduction-crossover.png" target="_blank" rel="noopener"><img src="img/row-reduction-crossover.png" alt="Row reduction time against matrix size: slower than the best CPU code when small, 16 times faster at 65,536, 12 minutes at 1,048,576 against about 35 hours" loading="lazy" />row reduction vs CPU</a>
+          <a class="fig" href="img/kernel-rewrites.png" target="_blank" rel="noopener"><img src="img/kernel-rewrites.png" alt="Seconds per batch for each multiplication kernel: matrix kernel, two-sided, anti-diagonal, 37 times faster overall" loading="lazy" />37&times; in three kernels</a>
+          <a class="fig" href="img/storage-projection.png" target="_blank" rel="noopener"><img src="img/storage-projection.png" alt="Projected disk needed for saved data, reaching 12 petabytes at stem 400, above the cluster&rsquo;s free space" loading="lazy" />12 PB we didn&rsquo;t need</a>
+        </div>
+        <p style="margin: 10px 0 0; font-size: var(--small-fs); color: var(--dim)">The production code for this run lives on its own branch; the pieces that stand on their own are being backported to sseq.</p>
+      </article>
+
+      <article>
+        <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
+          <h3 style="margin: 0; font-size: 15px; color: var(--bright); font-family: var(--mono-ui); font-weight: 700"><a href="https://github.com/SpectralSequences/sseq" style="color: var(--bright)">sseq</a></h3>
+          <span style="color: var(--dim); font-size: var(--meta-fs); font-family: var(--mono-ui)">Rust &middot; lead developer &middot; 2023&ndash;present</span>
+        </div>
+        <ul style="margin: var(--ul-margin); padding-left: var(--ul-pad); display: var(--ul-display); flex-direction: column; gap: 6px; margin-top: 8px">
+          <li>An open-source Rust library for large-scale computation in algebraic topology. It produced our published stem-256 dataset (2023) and the stem-400 run above.</li>
+          <li>Rewrote the hottest loop to search only the candidates that can contribute, instead of enumerating everything and throwing most of it away: <strong style="color: var(--bright)">18&times; faster on CPU</strong> at the largest size tested (1.9&times; at the smallest), with the gap widening steadily with size. The same idea drives the GPU kernel in the run above.</li>
+          <li>Replaced a hash-map lookup in the inner loop with closed-form indexing: <strong style="color: var(--bright)">2.7&times; faster</strong> at scale, and the core tables from 12.4&nbsp;GB of memory to 2.1&nbsp;GB.</li>
+          <li>Hand-wrote a Hopper tensor-core matrix multiply over &#120125;&#8322;, built on the 1-bit <a class="ref" href="https://docs.nvidia.com/cuda/parallel-thread-execution/#asynchronous-warpgroup-level-matrix-instructions"><code style="font-family: var(--mono); color: var(--code-color)">wgmma &hellip; and.popc</code></a> instruction: <strong style="color: var(--bright)">10,031 trillion bit operations per second</strong> on one H200, 14.5&times; the best other GPU code and 331&times; the best CPU code at the same size. Built up in 12 phases: TMA loads with a 128-byte swizzle, warp-specialized producer/consumer pipelining, a persistent grid with grouped tile rasterization, TMA multicast across clusters, and register blocking.</li>
+          <li>Hand-wrote an AVX-512 microkernel for matrix multiplication over 𝔽₂: <strong style="color: var(--bright)">over a trillion bit operations per second on a single CPU core</strong>.</li>
+          <li>Generalized the main algorithm to an entire family of related algebras (every prime, plus the variants used in motivic homotopy theory), built on one generic implementation instead of special-cased branches.</li>
+          <li>In review: the rest of the GPU backend and the distributed solver from the run above.</li>
+          <li>Type-safe finite field arithmetic for primes up to 2&#179;&#185;&nbsp;&minus;&nbsp;1 via const generics and SIMD intrinsics; non-prime fields via Zech logarithms.</li>
+          <li>Wait-free atomic data structures with trie-based backing and write-once semantics.</li>
+          <li>400+ <a class="ref" href="https://docs.rs/proptest">property-based tests</a>, plus <a class="ref" href="https://docs.rs/loom"><code style="font-family: var(--mono); color: var(--code-color)">loom</code></a>/<a class="ref" href="https://github.com/rust-lang/miri"><code style="font-family: var(--mono); color: var(--code-color)">miri</code></a> against UB. Found a priority inversion via <a class="ref" href="https://docs.rs/tracing"><code style="font-family: var(--mono); color: var(--code-color)">tracing</code></a>; fixing it saved days of computation.</li>
+        </ul>
+        <div class="gallery two">
+          <a class="fig" href="img/gemm-phases.png" target="_blank" rel="noopener"><img src="img/gemm-phases.png" alt="The F2 matrix multiply on one H200, phase by phase: from 1,579 to 10,031 trillion bit operations per second at size 65536, with two big steps at phases 3 and 8" loading="lazy" />1,579 → 10,031 trillion ops/s</a>
+          <a class="fig" href="img/naive-vs-antidiag-cpu.png" target="_blank" rel="noopener"><img src="img/naive-vs-antidiag-cpu.png" alt="Anti-diagonal versus standard Milnor multiplication on the CPU: speedup grows from 1.9 times at degree 50 to 18 times at degree 600" loading="lazy" />18&times; at degree 600</a>
+        </div>
+        <p style="margin: 10px 0 0; font-size: var(--small-fs); color: var(--dim)">Since 2025, my code has been written with AI coding agents (Claude Code), from my designs and optimization ideas. Everything merged upstream is reviewed by hand by Hood Chatham and me.</p>
+      </article>
+
+      <article>
+        <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
+          <h3 style="margin: 0; font-size: 15px; color: var(--bright); font-family: var(--mono-ui); font-weight: 700"><a href="https://github.com/JoeyBF/SeqSee" style="color: var(--bright)">SeqSee</a></h3>
+          <span style="color: var(--dim); font-size: var(--meta-fs); font-family: var(--mono-ui)">Python &middot; author &middot; 2024&ndash;present</span>
+        </div>
+        <ul style="margin: var(--ul-margin); padding-left: var(--ul-pad); display: var(--ul-display); flex-direction: column; gap: 6px; margin-top: 8px">
+          <li>Turns JSON into self-contained interactive HTML+SVG spectral sequence charts &mdash; pan/zoom, KaTeX, multi-page collections, custom theming.</li>
+          <li>Pydantic-introspected JSON schema; Nix flakes, uv, ruff, pyright; published on PyPI.</li>
+          <li>A WebGL renderer for huge charts: the full stem-400 chart below, 1.1 million nodes and edges, is a 1.4&nbsp;MB file that decodes in ~130&nbsp;ms.</li>
+        </ul>
+        <div style="margin-top: 14px; border: var(--card-border); border-radius: var(--card-radius); overflow: hidden">
+          <iframe src="{{ chartSrc }}" loading="lazy" title="Adams E2 page through stem 400, rendered with SeqSee" class="chart-frame" style="width: 100%; border: none; display: block; background: var(--bg)"></iframe>
+        </div>
+        <p style="margin: 8px 0 0; font-size: var(--small-fs); color: var(--dim)">&uarr; live: the full 2-primary Adams E&#8322; page through stem 400, with all 253,204 generators and 884,312 h&#8320;, h&#8321;, h&#8322; products, drawn by SeqSee&rsquo;s WebGL renderer. Scroll to zoom in, drag to pan.</p>
+      </article>
+    </div>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="github" data-screen-label="GitHub">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>GitHub</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px">
+      <sc-for list="{{ repos }}" as="repo" hint-placeholder-count="4">
+        <a href="{{ repo.url }}" style="display: block; border: var(--card-border); background: var(--card-bg); border-radius: var(--card-radius); padding: 12px 14px; text-decoration: none; color: var(--fg)" style-hover="border-color: #4ade80">
+          <div style="display: flex; align-items: baseline; gap: 8px; justify-content: space-between">
+            <span style="font-family: var(--mono-ui); font-weight: 700; color: var(--link)">{{ repo.name }}</span>
+            <span style="color: var(--dim); font-size: 12px; white-space: nowrap">&#9733; {{ repo.stars }}</span>
+          </div>
+          <div style="font-size: 13px; color: var(--fg); margin-top: 4px; line-height: 1.5">{{ repo.desc }}</div>
+          <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--dim)">
+            <span style="width: 9px; height: 9px; border-radius: 50%; background: {{ repo.langColor }}; display: inline-block"></span>
+            <span>{{ repo.lang }}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+    <div style="margin-top: 18px">
+      <div style="color: var(--dim); font-size: var(--meta-fs); margin-bottom: 8px; font-family: var(--mono-ui)">recent activity</div>
+      <div style="display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-family: var(--mono-ui)">
+        <sc-for list="{{ events }}" as="ev" hint-placeholder-count="3">
+          <div style="display: flex; gap: 12px"><span style="color: var(--dim); min-width: 32px; text-align: right">{{ ev.when }}</span><span>{{ ev.text }}</span></div>
+        </sc-for>
+      </div>
+      <p style="margin: 12px 0 0; font-size: var(--small-fs); color: var(--dim)">{{ ghNote }} full history at <a href="https://github.com/JoeyBF">github.com/JoeyBF</a>.</p>
+    </div>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="research" data-screen-label="Research">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>Research</h2>
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <article>
+        <div style="color: var(--bright)">The Adams E&#8322; page of the sphere through stem 400</div>
+        <div style="color: var(--dim); font-size: var(--small-fs); margin-top: 3px">2026 &middot; computed on Wayne State&rsquo;s HPC Grid &middot; data release in preparation</div>
+        <p style="margin: 6px 0 0">The minimal resolution of &#120125;&#8322; over the Steenrod algebra through stem 400 and filtration 202: 253,204 generators in 81,002 bidegrees, of which 173,007 lie beyond the previous best chart (Wu, t&nbsp;&le;&nbsp;350). Complete agreement with Wu&rsquo;s chart on the 50,399 bidegrees both cover.</p>
+      </article>
+      <article>
+        <div style="color: var(--bright)">The E&#8322; page of the 2-primary Adams spectral sequence in a large range</div>
+        <div style="color: var(--dim); font-size: var(--small-fs); margin-top: 3px">with Dexter Chua and Hood Chatham &middot; Zenodo, 2023 &middot; <a href="https://doi.org/10.5281/zenodo.8021736" style="font-family: var(--mono-ui)">doi:10.5281/zenodo.8021736</a></div>
+        <p style="margin: 6px 0 0">A 5,300+ CPU-day distributed computation on 19 64-core nodes, producing 22.9&nbsp;TB of compressed data. At release, the state-of-the-art dataset in computational stable homotopy theory.</p>
+      </article>
+      <article>
+        <div style="color: var(--bright)">Milnor&ndash;Moore theorems for bialgebras in characteristic zero</div>
+        <div style="color: var(--dim); font-size: var(--small-fs); margin-top: 3px">with Yatin Patel and Andrew Salch &middot; J. Algebra, 2023 &middot; <a href="https://doi.org/10.1016/j.jalgebra.2023.02.020" style="font-family: var(--mono-ui)">doi:10.1016/j.jalgebra.2023.02.020</a></div>
+        <p style="margin: 6px 0 0">An extension of the classic Milnor&ndash;Moore equivalence to certain bialgebras without antipodes.</p>
+      </article>
+      <article>
+        <div style="color: var(--bright)">Automated inference in the Adams spectral sequence</div>
+        <div style="color: var(--dim); font-size: var(--small-fs); margin-top: 3px">PhD thesis &middot; Wayne State University, 2025</div>
+        <p style="margin: 6px 0 0">Two novel algorithms for automated differential deduction: a local one built on careful bookkeeping of affine spaces, and a global one that rephrases the whole problem as SAT.</p>
+      </article>
+    </div>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="talks" data-screen-label="Talks">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>Talks</h2>
+    <article>
+      <div style="color: var(--bright)">Computing Ext to stem 400 on an HPC cluster: a worklog</div>
+      <div style="color: var(--dim); font-size: var(--small-fs); margin-top: 3px">Topology seminar &middot; Wayne State University &middot; October 27, 2026 &middot; 70 min with Q&amp;A &middot; <a href="https://youtu.be/5b8YDziWjAo" style="font-family: var(--mono-ui)">video&nbsp;&rarr;</a></div>
+      <p style="margin: 6px 0 0">It is well known that the best tool for computing the stable stems is the Adams spectral sequence, which starts from the cohomology of the Steenrod algebra. It is known in a large range, with a long tradition of computing it further and further. In practice, this only requires hardware and patience. I had neither.</p>
+      <p style="margin: 6px 0 0">This talk is the story of how I kept upgrading my implementation of the ext resolver from sseq over the last several months. I start from a local run on my computer, go through several rounds of finding and fixing bottlenecks, and end up using a significant chunk of Wayne State&rsquo;s High Performance Computing cluster. Expect charts and live demos. No HPC experience required.</p>
+      <dl style="display: var(--dl-display); grid-template-columns: 110px 1fr; gap: 6px 20px; margin: 12px 0 0; font-size: var(--small-fs)">
+        <dt style="color: var(--dim); font-family: var(--mono-ui)">progress</dt>
+        <dd style="margin: var(--dd-margin)">100%, completed 2026-11-05: 81,002 bidegrees, 253,204 generators</dd>
+        <dt style="color: var(--dim); font-family: var(--mono-ui)">compute</dt>
+        <dd style="margin: var(--dd-margin)">~25,000 GPU-hours, ~18 quadrillion Milnor products and ~1.2 sextillion bit operations of row reduction over the 37-day run</dd>
+        <dt style="color: var(--dim); font-family: var(--mono-ui)">peak</dt>
+        <dd style="margin: var(--dd-margin)">10.5 TB of memory held across 17 nodes; the resolution itself is ~100 GB on disk</dd>
+        <dt style="color: var(--dim); font-family: var(--mono-ui)">code</dt>
+        <dd style="margin: var(--dd-margin)">45k &rarr; 129k lines of Rust and CUDA, June to October; 1,200+ commits, 54 upstream pull requests</dd>
+      </dl>
+    </article>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="cv" data-screen-label="CV">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>CV, abridged</h2>
+    <dl style="display: var(--dl-display); grid-template-columns: 110px 1fr; gap: 10px 20px; margin: 0">
+      <dt style="color: var(--dim); font-family: var(--mono-ui); font-size: var(--meta-fs)">2020&ndash;2025</dt>
+      <dd style="margin: var(--dd-margin)">PhD in Mathematics, Wayne State University. Also taught College Algebra and Calculus&nbsp;I &mdash; emphasized deep understanding over rote; evaluations suffered accordingly.</dd>
+      <dt style="color: var(--dim); font-family: var(--mono-ui); font-size: var(--meta-fs)">2018&ndash;2019</dt>
+      <dd style="margin: var(--dd-margin)">MSc in Mathematics, Western University.</dd>
+      <dt style="color: var(--dim); font-family: var(--mono-ui); font-size: var(--meta-fs)">2012&ndash;2018</dt>
+      <dd style="margin: var(--dd-margin)">Honors BSc in Mathematics, University of Ottawa, <em>magna cum laude</em>.</dd>
+      <dt style="color: var(--dim); font-family: var(--mono-ui); font-size: var(--meta-fs)">stack</dt>
+      <dd style="margin: var(--dd-margin)">Rust (primary, 5 yrs), CUDA/PTX (Hopper), Python (15 yrs), C/C++, x86-64 ASM, WGSL &middot; <a class="ref" href="https://docs.rs/cudarc">cudarc</a>, <a class="ref" href="https://docs.nvidia.com/cuda/nvrtc/index.html">NVRTC</a>, Nsight, <a class="ref" href="https://docs.rs/rayon">rayon</a> &middot; NixOS, Slurm, GitHub Actions &middot; proptest, Miri, Loom, Criterion, perf, flamegraph.</dd>
+      <dt style="color: var(--dim); font-family: var(--mono-ui); font-size: var(--meta-fs)">languages</dt>
+      <dd style="margin: var(--dd-margin)">French (native), English (functionally native), German &amp; Russian (B1+).</dd>
+    </dl>
+    <p style="margin: 16px 0 0; font-size: 14px; color: var(--dim)">Full details in the <a href="uploads/Resume_joeybf.pdf" download="Resume_joeybf.pdf">PDF resume</a>.</p>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <section id="offclock" data-screen-label="Interests">
+    <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>Off the clock</h2>
+    <p style="margin: 0">Crosswords (NYT Thursday solver, Saturday is the boss fight), chess (1500 rapid and climbing), cooking, and cinema.</p>
+  </section>
+
+  <hr style="border-style: var(--hr-style); border-width: var(--hr-width); border-color: var(--hr-color); margin: var(--hr-margin)" />
+
+  <footer style="display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--dim); font-size: var(--foot-fs); font-family: var(--mono-ui)">
+    <span>&copy; 2026 Joey Beauvais-Feisthauer &middot; v2.0.0 <span title="breaking change: Ext now goes to stem 400">(2026-11-10)</span></span>
+    <span style="display: var(--hacker-only)"><span class="key-hint">press <span style="color: var(--accent)">`</span> for a shell</span><span class="touch-hint">tap <span style="color: var(--accent)">~/joeybf</span> for a shell</span> &middot; hand-rolled HTML, no framework harmed</span>
+    <span style="display: var(--web1-only)">best viewed in any browser</span>
+  </footer>
+
+</div>
+</div>
+
+<div style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: {{ termDisplay }}; padding: 0 16px">
+  <div style="max-width: 860px; margin: 0 auto; background: rgba(6,10,8,0.94); border: 1px solid #2a332b; border-bottom: none; border-radius: 6px 6px 0 0; box-shadow: 0 -8px 40px rgba(0,0,0,0.55); backdrop-filter: blur(6px)">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 14px; border-bottom: 1px solid #1b221c; font-family: var(--mono); font-size: 12px; color: #7a857a">
+      <span>joey@joeybf.phd &mdash; sh</span>
+      <button onClick="{{ closeTerm }}" style="background: none; border: none; color: #7a857a; cursor: pointer; font-family: inherit; font-size: 13px" style-hover="color: #e8ede8">[x]</button>
+    </div>
+    <div ref="{{ termBodyRef }}" onClick="{{ focusTerm }}" style="max-height: 260px; overflow-y: auto; padding: 12px 14px 14px; font-family: var(--mono); font-size: 13px; line-height: 1.55; cursor: text">
+      <sc-for list="{{ termLines }}" as="line" hint-placeholder-count="1">
+        <div style="white-space: pre-wrap; color: {{ line.color }}; overflow-wrap: anywhere">{{ line.text }}</div>
+      </sc-for>
+      <div style="display: flex; gap: 8px; margin-top: 2px">
+        <span style="color: #4ade80">$</span>
+        <input ref="{{ termInputRef }}" value="{{ termInput }}" onChange="{{ onTermInput }}" onKeyDown="{{ onTermKey }}" autocomplete="off" spellcheck="false" style="flex: 1; background: transparent; border: none; outline: none; color: #e8ede8; font-family: var(--mono); font-size: 13px; padding: 0" />
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;hacker&quot;, &quot;web1&quot;], &quot;default&quot;: &quot;hacker&quot;, &quot;tsType&quot;: &quot;'hacker' | 'web1'&quot;, &quot;section&quot;: &quot;Theme&quot;}, &quot;motion&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = {
+    theme: null, activeSection: 'now', termOpen: false, termInput: '', termLines: [],
+    repos: [
+      { name: 'SpectralSequences/sseq', url: 'https://github.com/SpectralSequences/sseq', desc: 'The root repository for the SpectralSequences project.', lang: 'Rust', langColor: '#dea584', stars: '\u2014' },
+      { name: 'JoeyBF/SeqSee', url: 'https://github.com/JoeyBF/SeqSee', desc: 'A generic visualization tool for spectral sequence data.', lang: 'Python', langColor: '#3572A5', stars: '\u2014' },
+    ],
+    events: [{ when: '\u2026', text: 'fetching from api.github.com\u2026' }],
+    ghNote: 'live from the GitHub API \u2014',
+  };
+  canvasRef = React.createRef();
+  termBodyRef = React.createRef();
+  termInputRef = React.createRef();
+  componentDidMount() {
+    let saved = null;
+    try { saved = localStorage.getItem('joeybf-theme'); } catch (e) {}
+    // everyone lands on the hacker theme; web 1.0 is opt-in and remembered per visitor
+    this.applyTheme(saved || this.props.defaultTheme || 'hacker');
+    this.startBg();
+    this.setupSpy();
+    this.setupKeys();
+    this.fetchGitHub();
+  }
+  componentDidUpdate() {
+    if (this.state.theme) document.body.dataset.theme = document.documentElement.dataset.theme = this.state.theme;
+    const body = this.termBodyRef.current;
+    if (body) body.scrollTop = body.scrollHeight;
+  }
+  componentWillUnmount() {
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._cleanup) this._cleanup();
+    if (this._spy) this._spy.disconnect();
+    if (this._onKey) window.removeEventListener('keydown', this._onKey);
+  }
+  applyTheme(theme) {
+    document.body.dataset.theme = document.documentElement.dataset.theme = theme;
+    this.setState({ theme });
+  }
+  setupSpy() {
+    this._spy = new IntersectionObserver((entries) => {
+      for (const en of entries) if (en.isIntersecting) this.setState({ activeSection: en.target.id });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    document.querySelectorAll('section[id]').forEach(s => this._spy.observe(s));
+  }
+  setupKeys() {
+    const seq = ['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+    let pos = 0;
+    this._onKey = (e) => {
+      const k = e.key.toLowerCase();
+      if (k === seq[pos]) { pos++; if (pos === seq.length) { pos = 0; this.matrixBurst(); } }
+      else pos = (k === seq[0]) ? 1 : 0;
+      if (document.body.dataset.theme === 'web1') return;
+      const typing = e.target && /input|textarea/i.test(e.target.tagName);
+      if (e.key === '`' && !typing && !this.state.termOpen) { e.preventDefault(); this.openTerm(); }
+      else if (e.key === 'Escape' && this.state.termOpen) this.closeTerm();
+    };
+    window.addEventListener('keydown', this._onKey);
+  }
+  matrixBurst() {
+    this._matrixUntil = performance.now() + 7000;
+    if (this.state.termOpen) this.pushLines([{ text: 'wake up, neo\u2026', color: '#4ade80' }]);
+  }
+  fetchGitHub() {
+    const langColors = { Rust: '#dea584', Python: '#3572A5', JavaScript: '#f1e05a', TypeScript: '#3178c6', C: '#555555', 'C++': '#f34b7d', Nix: '#7e7eff', Shell: '#89e051', HTML: '#e34c26', Typst: '#239dad' };
+    const fmtRepo = (r) => ({
+      name: r.full_name, url: r.html_url,
+      desc: r.description || '(no description \u2014 the code speaks for itself)',
+      lang: r.language || 'misc', langColor: langColors[r.language] || '#7a857a',
+      stars: String(r.stargazers_count),
+    });
+    Promise.all([
+      fetch('https://api.github.com/repos/SpectralSequences/sseq').then(r => r.ok ? r.json() : null),
+      fetch('https://api.github.com/users/JoeyBF/repos?per_page=100&sort=updated').then(r => r.ok ? r.json() : null),
+    ]).then(([sseq, mine]) => {
+      if (!sseq && !mine) throw new Error('rate limited');
+      let repos = [];
+      if (sseq) repos.push(fmtRepo(sseq));
+      if (Array.isArray(mine)) {
+        repos = repos.concat(
+          mine.filter(r => !r.fork)
+            .sort((a, b) => b.stargazers_count - a.stargazers_count)
+            .slice(0, 3).map(fmtRepo)
+        );
+      }
+      if (repos.length) this.setState({ repos: repos.slice(0, 4) });
+    }).catch(() => {});
+    fetch('https://api.github.com/users/JoeyBF/events/public?per_page=30')
+      .then(r => { if (!r.ok) throw new Error('nope'); return r.json(); })
+      .then(evs => {
+        const out = [];
+        for (const e of evs) {
+          const t = this.evText(e);
+          if (t) out.push({ when: this.ago(e.created_at), text: t });
+          if (out.length >= 6) break;
+        }
+        this.setState({ events: out.length ? out : [{ when: '', text: 'quiet lately (publicly, anyway)' }] });
+      })
+      .catch(() => this.setState({
+        events: [{ when: '', text: 'api.github.com said no (rate limit, probably)' }],
+        ghNote: 'GitHub API unavailable right now \u2014',
+      }));
+  }
+  evText(e) {
+    const repo = (e.repo && e.repo.name || '').split('/').pop();
+    const p = e.payload || {};
+    switch (e.type) {
+      case 'PushEvent': { const n = (p.commits || []).length || 1; return `pushed ${n} commit${n > 1 ? 's' : ''} to ${repo}`; }
+      case 'PullRequestEvent': return `${p.action} a pull request in ${repo}`;
+      case 'IssuesEvent': return `${p.action} an issue in ${repo}`;
+      case 'IssueCommentEvent': return `commented on an issue in ${repo}`;
+      case 'PullRequestReviewEvent': return `reviewed a pull request in ${repo}`;
+      case 'CreateEvent': return p.ref_type === 'repository' ? `created ${repo}` : `created ${p.ref_type} ${p.ref} in ${repo}`;
+      case 'ReleaseEvent': return `released ${p.release && p.release.tag_name} of ${repo}`;
+      case 'WatchEvent': return `starred ${repo}`;
+      case 'ForkEvent': return `forked ${repo}`;
+      default: return null;
+    }
+  }
+  ago(iso) {
+    const s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (s < 3600) return Math.max(1, Math.floor(s / 60)) + 'm';
+    if (s < 86400) return Math.floor(s / 3600) + 'h';
+    if (s < 86400 * 30) return Math.floor(s / 86400) + 'd';
+    return Math.floor(s / 86400 / 30) + 'mo';
+  }
+  // ---- terminal ----
+  openTerm = () => {
+    const first = this.state.termLines.length === 0;
+    this.setState({ termOpen: true, termLines: first ? [
+      { text: 'joeybf.phd sh v0.2 \u2014 type `help`', color: '#7a857a' },
+    ] : this.state.termLines }, () => {
+      const inp = this.termInputRef.current; if (inp) inp.focus();
+    });
+  };
+  closeTerm = () => this.setState({ termOpen: false });
+  pushLines(lines) { this.setState({ termLines: [...this.state.termLines, ...lines].slice(-200) }); }
+  runCmd(raw) {
+    const out = [{ text: '$ ' + raw, color: '#7a857a' }];
+    const say = (text, color) => out.push({ text, color: color || '#c4ccc4' });
+    const [cmd, ...args] = raw.trim().split(/\s+/);
+    const arg = args.join(' ');
+    switch ((cmd || '').toLowerCase()) {
+      case '': break;
+      case 'help':
+        say('commands: ls, cat <file>, whoami, version, pwd, echo, fortune, theme, clear, exit');
+        say('(sudo works. sort of.)', '#7a857a'); break;
+      case 'ls': say('about.txt   interests.txt   stem400.log   resume.pdf   projects/   research/'); break;
+      case 'cat':
+        if (arg === 'about.txt') say('Mathematician turned systems programmer. Rust, CUDA, spectral sequences.');
+        else if (arg === 'stem400.log') { say('2026-11-05        done: 81,002 bidegrees, 253,204 generators, 173,007 past t = 350. max rank 49 at (376, 24)', '#4ade80'); say('talk: https://youtu.be/5b8YDziWjAo', '#7a857a'); }
+        else if (arg === 'interests.txt') say('crosswords, chess (1500 rapid), cooking, cinema');
+        else if (arg === 'resume.pdf') { say('binary file \u2014 opening in a sane viewer\u2026'); window.open('uploads/Resume_joeybf.pdf', '_blank'); }
+        else if (!arg) say('cat: which file? try `ls`', '#f87171');
+        else say(`cat: ${arg}: No such file or directory`, '#f87171');
+        break;
+      case 'whoami': say('joey \u2014 he/him, PhD, F\u2082 enthusiast'); break;
+      case 'version': case '--version':
+        say('joeybf.phd 2.0.0 (2026-11-10)');
+        say('BREAKING: Ext now goes to stem 400. Consumers of stem 256 should migrate.', '#7a857a');
+        break;
+      case 'pwd': say('/home/joey'); break;
+      case 'echo': say(arg || ''); break;
+      case 'fortune': {
+        const f = [
+          'There are two hard problems in CS: cache invalidation, naming things, and off-by-one errors.',
+          'The spectral sequence converges. Eventually. Probably.',
+          'Every proof is trivial once you know it. Step one: know it.',
+          'AVX-512: because 256 bits of disappointment wasn\u2019t enough.',
+          'Q: What\u2019s purple and commutes? A: An abelian grape.',
+        ];
+        say(f[Math.floor(Math.random() * f.length)]); break;
+      }
+      case 'sudo':
+        if (/^hire\b/.test(arg)) { say('Permission granted.', '#4ade80'); say('Complete installation via joey@joeybf.phd'); }
+        else say('joey is not in the sudoers file. This incident will be reported.', '#f87171');
+        break;
+      case 'theme': say('switching to the information superhighway\u2026'); setTimeout(() => this.toggle(), 500); break;
+      case 'vim': case 'nvim': say('you may never leave. (try `:q` here, it works)'); break;
+      case 'emacs': say('a great operating system, lacking only a decent text editor.'); break;
+      case 'rm': say('nice try. filesystem is read-only (it\u2019s a website).', '#f87171'); break;
+      case 'make': say('make: *** No rule to make target \u2018friends\u2019. Stop.', '#f87171'); break;
+      case ':q': case ':q!': case 'exit': case 'quit': case 'q':
+        this.setState({ termLines: [...this.state.termLines, ...out], termInput: '', termOpen: false }); return;
+      case ':wq': say('write quit? this isn\u2019t vim. fine, saved nothing, quitting.'); setTimeout(() => this.closeTerm(), 600); break;
+      case 'clear': this.setState({ termLines: [], termInput: '' }); return;
+      default: say(`sh: command not found: ${cmd} (try \`help\`)`, '#f87171');
+    }
+    this.setState({ termLines: [...this.state.termLines, ...out].slice(-200), termInput: '' });
+  }
+  // ---- background ----
+  startBg() {
+    const canvas = this.canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const resize = () => {
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    this._cleanup = () => window.removeEventListener('resize', resize);
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stars = [];
+    let seed = 42;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    for (let i = 0; i < 90; i++) stars.push({ x: rnd(), y: rnd() * 0.55, r: 0.4 + rnd() * 1.1, p: rnd() * Math.PI * 2 });
+    const glyphs = '01\u2202\u03a3\u03a0\u03bb\u03bc\u03bd\u03b7\u03c3\u03ba\u03c4\u03b6\u221e\u222b\u03c0\u03c8\u03c9\u0393\u0394\u039e\u03a9';
+    let mcols = null;
+    let t = 0;
+    const draw = () => {
+      this._raf = requestAnimationFrame(draw);
+      if (document.body.dataset.theme === 'web1') return;
+      const W = canvas.width, H = canvas.height;
+      const motion = (this.props.motion ?? true) && !reduced;
+      if (motion) t += 0.008;
+      ctx.clearRect(0, 0, W, H);
+      const horizon = H * 0.34, cx = W / 2, f = H * 1.1;
+      for (const s of stars) {
+        const tw = 0.25 + 0.3 * (0.5 + 0.5 * Math.sin(t * 2 + s.p));
+        ctx.fillStyle = `rgba(160,220,180,${tw})`;
+        ctx.beginPath();
+        ctx.arc(s.x * W, s.y * horizon + H * 0.02, s.r * dpr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const rows = 30, cols = 52;
+      const spacing = Math.max(W, H) / 26;
+      for (let zi = rows; zi >= 1; zi--) {
+        const z = zi * spacing * 0.9;
+        const scale = f / (f + z);
+        const depth = 1 - zi / rows;
+        const alpha = 0.05 + depth * 0.22;
+        ctx.strokeStyle = `rgba(74,222,128,${alpha})`;
+        ctx.lineWidth = dpr * (0.5 + depth * 0.7);
+        ctx.beginPath();
+        const pts = [];
+        for (let xi = 0; xi <= cols; xi++) {
+          const xw = (xi - cols / 2) * spacing * 1.6;
+          const wave = Math.sin(xi * 0.32 + t * 1.4) * Math.cos(zi * 0.28 - t) * spacing * 0.55
+                     + Math.sin(xi * 0.11 - t * 0.6) * spacing * 0.3;
+          const sx = cx + xw * scale;
+          const sy = horizon + (H * 0.62 + wave) * scale;
+          pts.push([sx, sy]);
+          if (xi === 0) ctx.moveTo(sx, sy); else ctx.lineTo(sx, sy);
+        }
+        ctx.stroke();
+        if (zi < rows * 0.6) {
+          ctx.fillStyle = `rgba(134,239,172,${0.1 + depth * 0.35})`;
+          for (let xi = 0; xi <= cols; xi += 3) {
+            const [sx, sy] = pts[xi];
+            ctx.fillRect(sx - dpr, sy - dpr, dpr * 2, dpr * 2);
+          }
+        }
+      }
+      const fade = ctx.createLinearGradient(0, 0, 0, H);
+      fade.addColorStop(0, 'rgba(11,13,12,0.55)');
+      fade.addColorStop(0.45, 'rgba(11,13,12,0.72)');
+      fade.addColorStop(1, 'rgba(11,13,12,0.35)');
+      ctx.fillStyle = fade;
+      ctx.fillRect(0, 0, W, H);
+      // konami: math-glyph rain
+      if (this._matrixUntil) {
+        const left = this._matrixUntil - performance.now();
+        if (left <= 0) { this._matrixUntil = null; mcols = null; }
+        else {
+          const size = 16 * dpr, n = Math.ceil(W / size);
+          if (!mcols || mcols.length !== n) mcols = Array.from({ length: n }, () => ({ y: -Math.random() * H, v: (3 + Math.random() * 5) * dpr }));
+          const globalA = Math.min(1, left / 1200);
+          ctx.font = `${14 * dpr}px monospace`;
+          for (let i = 0; i < n; i++) {
+            const c = mcols[i];
+            c.y += c.v;
+            if (c.y > H + 20 * size) c.y = -Math.random() * H * 0.5;
+            for (let k = 0; k < 14; k++) {
+              const y = c.y - k * size;
+              if (y < -size || y > H + size) continue;
+              const a = (k === 0 ? 0.95 : (1 - k / 14) * 0.5) * globalA;
+              ctx.fillStyle = k === 0 ? `rgba(220,255,230,${a})` : `rgba(74,222,128,${a})`;
+              ctx.fillText(glyphs[(i * 7 + Math.floor((c.y - y) / size) + Math.floor(c.y / size)) % glyphs.length], i * size, y);
+            }
+          }
+        }
+      }
+    };
+    draw();
+  }
+  toggle() {
+    const theme = this.state.theme || 'hacker';
+    const next = theme === 'web1' ? 'hacker' : 'web1';
+    try { localStorage.setItem('joeybf-theme', next); } catch (e) {}
+    if (next === 'web1' && this.state.termOpen) this.setState({ termOpen: false });
+    this.applyTheme(next);
+  }
+  renderVals() {
+    const theme = this.state.theme || this.props.defaultTheme || 'hacker';
+    const active = this.state.activeSection;
+    const sections = [
+      { id: 'now', label: 'now' }, { id: 'projects', label: 'projects' }, { id: 'github', label: 'github' },
+      { id: 'research', label: 'research' }, { id: 'talks', label: 'talks' }, { id: 'cv', label: 'cv' }, { id: 'offclock', label: 'off the clock' },
+    ];
+    return {
+      canvasRef: this.canvasRef, termBodyRef: this.termBodyRef, termInputRef: this.termInputRef,
+      toggleLabel: theme === 'web1' ? 'Click here for the FANCY version of this page' : '[ switch to web 1.0 ]',
+      toggleTheme: () => this.toggle(),
+      sideNav: sections.map(s => ({
+        ...s,
+        marker: s.id === active ? '\u25b8 ' : '  ',
+        color: s.id === active ? '#4ade80' : '#7a857a',
+      })),
+      repos: this.state.repos,
+      events: this.state.events,
+      ghNote: this.state.ghNote,
+      demoSrc: 'demo-chart.html?theme=' + (theme === 'web1' ? 'light' : 'dark'),
+      chartSrc: (theme === 'web1' ? 'ext-chart.html' : 'ext-chart-dark.html') + '#chart=0&x=205.00&y=100.00&zoom=0.029',
+      termDisplay: this.state.termOpen && theme !== 'web1' ? 'block' : 'none',
+      termLines: this.state.termLines,
+      termInput: this.state.termInput,
+      onTermInput: (e) => this.setState({ termInput: e.target.value }),
+      onTermKey: (e) => { if (e.key === 'Enter') this.runCmd(this.state.termInput); },
+      openTerm: this.openTerm,
+      closeTerm: this.closeTerm,
+      focusTerm: () => { const i = this.termInputRef.current; if (i) i.focus(); },
+    };
+  }
+}
+</script>
+</body>
+</html>
