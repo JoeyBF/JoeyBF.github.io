@@ -118,7 +118,7 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
 
   <header data-screen-label="Header" style="display: var(--header-display); gap: 28px; align-items: flex-start; flex-wrap: wrap">
     <div class="portrait-box" style="flex: 0 0 auto; order: 2">
-      <img src="img/avatar.jpg" alt="Joey Beauvais-Feisthauer at his PhD commencement" style="display: block; width: 231px; height: calc(231px * 1.6180339887); object-fit: cover; border-radius: 4px">
+      <img src="img/avatar.webp" alt="Joey Beauvais-Feisthauer at his PhD commencement" style="display: block; width: 231px; height: calc(231px * 1.6180339887); object-fit: cover; border-radius: 4px">
     </div>
     <div style="flex: 1 1 380px; min-width: 300px">
       <div onClick="{{ openTerm }}" title="click for a shell" style="display: var(--hacker-only); color: var(--dim); font-size: 13px; font-family: var(--mono); cursor: pointer" style-hover="color: #4ade80">~/joeybf&nbsp;<span style="color: #2a332b">&#9608;</span></div>
@@ -174,11 +174,11 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
           <li>Fault-tolerant on a shared cluster: over the 37-day run, workers came and went as their allocations ended and restarted, with checkpoint/restart throughout, and the coordinator was upgraded live ~20 times without losing completed work.</li>
         </ul>
         <div class="gallery">
-          <a class="fig" href="img/census-node-vs-fleet.png" target="_blank" rel="noopener"><img src="img/census-node-vs-fleet.png" alt="Stems 0 to 300 with s up to 202: 205.5 hours on one 4-GPU node versus 28.3 hours on 23 GPUs (8 H200 and 15 L40S)" loading="lazy" />one node vs 23 GPUs</a>
-          <a class="fig" href="img/n400-progress.png" target="_blank" rel="noopener"><img src="img/n400-progress.png" alt="Bidegrees above stem 300 completed over time, October 2 to November 5, steepening sharply after October 29" loading="lazy" />Oct 2 → Nov 5</a>
-          <a class="fig" href="img/row-reduction-crossover.png" target="_blank" rel="noopener"><img src="img/row-reduction-crossover.png" alt="Row reduction time against matrix size: slower than the best CPU code when small, 16 times faster at 65,536, 12 minutes at 1,048,576 against about 35 hours" loading="lazy" />row reduction vs CPU</a>
-          <a class="fig" href="img/kernel-rewrites.png" target="_blank" rel="noopener"><img src="img/kernel-rewrites.png" alt="Seconds per batch for each multiplication kernel: matrix kernel, two-sided, anti-diagonal, 37 times faster overall" loading="lazy" />37&times; in three kernels</a>
-          <a class="fig" href="img/storage-projection.png" target="_blank" rel="noopener"><img src="img/storage-projection.png" alt="Projected disk needed for saved data, reaching 12 petabytes at stem 400, above the cluster&rsquo;s free space" loading="lazy" />12 PB we didn&rsquo;t need</a>
+          <a class="fig" href="img/census-node-vs-fleet.png" target="_blank" rel="noopener"><img src="img/thumb/census-node-vs-fleet.webp" alt="Stems 0 to 300 with s up to 202: 205.5 hours on one 4-GPU node versus 28.3 hours on 23 GPUs (8 H200 and 15 L40S)" loading="lazy" />one node vs 23 GPUs</a>
+          <a class="fig" href="img/n400-progress.png" target="_blank" rel="noopener"><img src="img/thumb/n400-progress.webp" alt="Bidegrees above stem 300 completed over time, October 2 to November 5, steepening sharply after October 29" loading="lazy" />Oct 2 → Nov 5</a>
+          <a class="fig" href="img/row-reduction-crossover.png" target="_blank" rel="noopener"><img src="img/thumb/row-reduction-crossover.webp" alt="Row reduction time against matrix size: slower than the best CPU code when small, 16 times faster at 65,536, 12 minutes at 1,048,576 against about 35 hours" loading="lazy" />row reduction vs CPU</a>
+          <a class="fig" href="img/kernel-rewrites.png" target="_blank" rel="noopener"><img src="img/thumb/kernel-rewrites.webp" alt="Seconds per batch for each multiplication kernel: matrix kernel, two-sided, anti-diagonal, 37 times faster overall" loading="lazy" />37&times; in three kernels</a>
+          <a class="fig" href="img/storage-projection.png" target="_blank" rel="noopener"><img src="img/thumb/storage-projection.webp" alt="Projected disk needed for saved data, reaching 12 petabytes at stem 400, above the cluster&rsquo;s free space" loading="lazy" />12 PB we didn&rsquo;t need</a>
         </div>
         <p style="margin: 10px 0 0; font-size: var(--small-fs); color: var(--dim)">The production code for this run lives on its own branch; the pieces that stand on their own are being backported to sseq.</p>
       </article>
@@ -201,8 +201,8 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
           <li>400+ <a class="ref" href="https://docs.rs/proptest">property-based tests</a>, plus <a class="ref" href="https://docs.rs/loom"><code style="font-family: var(--mono); color: var(--code-color)">loom</code></a>/<a class="ref" href="https://github.com/rust-lang/miri"><code style="font-family: var(--mono); color: var(--code-color)">miri</code></a> against UB. Found a priority inversion via <a class="ref" href="https://docs.rs/tracing"><code style="font-family: var(--mono); color: var(--code-color)">tracing</code></a>; fixing it saved days of computation.</li>
         </ul>
         <div class="gallery two">
-          <a class="fig" href="img/gemm-phases.png" target="_blank" rel="noopener"><img src="img/gemm-phases.png" alt="The F2 matrix multiply on one H200, phase by phase: from 1,579 to 10,031 trillion bit operations per second at size 65536, with two big steps at phases 3 and 8" loading="lazy" />1,579 → 10,031 trillion ops/s</a>
-          <a class="fig" href="img/naive-vs-antidiag-cpu.png" target="_blank" rel="noopener"><img src="img/naive-vs-antidiag-cpu.png" alt="Anti-diagonal versus standard Milnor multiplication on the CPU: speedup grows from 1.9 times at degree 50 to 18 times at degree 600" loading="lazy" />18&times; at degree 600</a>
+          <a class="fig" href="img/gemm-phases.png" target="_blank" rel="noopener"><img src="img/thumb/gemm-phases.webp" alt="The F2 matrix multiply on one H200, phase by phase: from 1,579 to 10,031 trillion bit operations per second at size 65536, with two big steps at phases 3 and 8" loading="lazy" />1,579 → 10,031 trillion ops/s</a>
+          <a class="fig" href="img/naive-vs-antidiag-cpu.png" target="_blank" rel="noopener"><img src="img/thumb/naive-vs-antidiag-cpu.webp" alt="Anti-diagonal versus standard Milnor multiplication on the CPU: speedup grows from 1.9 times at degree 50 to 18 times at degree 600" loading="lazy" />18&times; at degree 600</a>
         </div>
         <p style="margin: 10px 0 0; font-size: var(--small-fs); color: var(--dim)">Since 2025, my code has been written with AI coding agents (Claude Code), from my designs and optimization ideas. Everything merged upstream is reviewed by hand by Hood Chatham and me.</p>
       </article>
@@ -435,9 +435,10 @@ class Component extends DCLogic {
       const fw = Math.min(w, h * ratio), fh = fw / ratio;
       return { left: r.left + bx + (w - fw) / 2, top: r.top + by + (h - fh) / 2, width: fw, height: fh };
     };
+    // thumbnails are small WebPs; the full figures (1677px+ wide) are bigger than any sensible view, so fit to the viewport
     const target = (img) => {
       const ratio = img.naturalWidth / img.naturalHeight, pad = Math.min(32, window.innerWidth * 0.04);
-      const maxW = Math.min(window.innerWidth - 2 * pad, img.naturalWidth), maxH = Math.min(window.innerHeight - 2 * pad, img.naturalHeight);
+      const maxW = window.innerWidth - 2 * pad, maxH = window.innerHeight - 2 * pad;
       const w = Math.min(maxW, maxH * ratio), h = w / ratio;
       return { left: (window.innerWidth - w) / 2, top: (window.innerHeight - h) / 2, width: w, height: h };
     };
@@ -464,9 +465,13 @@ class Component extends DCLogic {
       overlay.tabIndex = -1;
       overlay.style.cssText = `position: fixed; inset: 0; z-index: 2147483000; cursor: zoom-out; outline: none; background-color: rgba(0,0,0,0); transition: background-color ${d}ms ease`;
       const big = document.createElement('img');
+      // start from the already-loaded thumbnail, then swap in the full-resolution figure once it arrives
       big.src = thumb.currentSrc || thumb.src;
       big.alt = thumb.alt;
-      big.style.cssText = `position: fixed; left: ${end.left}px; top: ${end.top}px; width: ${end.width}px; height: ${end.height}px; max-width: none; margin: 0; box-sizing: border-box;` +
+      const full = new Image();
+      full.onload = () => { if (open && open.big === big) big.src = full.src; };
+      full.src = link.href;
+      big.style.cssText = `position: fixed; left: ${end.left}px; top: ${end.top}px; width: ${end.width}px; height: ${end.height}px; max-width: none; margin: 0; box-sizing: border-box; object-fit: contain;` +
         ` background: ${cs.backgroundColor}; filter: ${cs.filter}; border: ${cs.borderTopWidth} solid ${web1 ? '#999' : 'var(--rule, #2a332b)'}; border-radius: ${cs.borderTopLeftRadius};` +
         ` transform-origin: 0 0; transform: ${flip(start, end)}; transition: transform ${d}ms cubic-bezier(.2,.7,.2,1); box-shadow: 0 10px 40px rgba(0,0,0,.45)`;
       overlay.appendChild(big);
@@ -476,11 +481,11 @@ class Component extends DCLogic {
       open = { link, thumb, overlay, big };
       overlay.addEventListener('click', close);
       overlay.focus({ preventScroll: true });
-      big.getBoundingClientRect(); // commit the start frame before animating
-      requestAnimationFrame(() => {
-        big.style.transform = 'none';
-        overlay.style.backgroundColor = web1 ? 'rgba(128,128,128,0.6)' : 'rgba(5,7,6,0.82)';
-      });
+      // force a style flush so the start transform is committed, then change it in the same task:
+      // the transition runs from the flushed value (no reliance on rAF, which can stall in throttled frames)
+      big.getBoundingClientRect(); getComputedStyle(overlay).backgroundColor;
+      big.style.transform = 'none';
+      overlay.style.backgroundColor = web1 ? 'rgba(128,128,128,0.6)' : 'rgba(5,7,6,0.82)';
       return true;
     };
     const onClick = (e) => {
@@ -488,15 +493,25 @@ class Component extends DCLogic {
       if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       if (show(link)) e.preventDefault();
     };
+    // warm the cache for the full figure when a pointer or focus lands on a thumbnail
+    const warmed = new Set();
+    const onWarm = (e) => {
+      const link = e.target.closest && e.target.closest('a.fig');
+      if (link && !warmed.has(link.href)) { warmed.add(link.href); new Image().src = link.href; }
+    };
     const onKey = (e) => { if (open && e.key === 'Escape') { e.stopPropagation(); close(); } };
     const onAway = () => close();
     document.addEventListener('click', onClick);
+    document.addEventListener('pointerover', onWarm, { passive: true });
+    document.addEventListener('focusin', onWarm);
     window.addEventListener('keydown', onKey, true);
     window.addEventListener('scroll', onAway, { passive: true });
     window.addEventListener('resize', onAway);
     this._lbCleanup = () => {
       close();
       document.removeEventListener('click', onClick);
+      document.removeEventListener('pointerover', onWarm);
+      document.removeEventListener('focusin', onWarm);
       window.removeEventListener('keydown', onKey, true);
       window.removeEventListener('scroll', onAway);
       window.removeEventListener('resize', onAway);
