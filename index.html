@@ -86,6 +86,8 @@ body:not([data-theme="web1"]) ::selection { background: #4ade80; color: #0b0d0c;
 @media (max-width: 1240px) { [data-sidebar] { display: none !important; } }
 body[data-theme="web1"] .portrait-box { float: right; margin: 0 0 8px 16px; }
 body[data-theme="web1"] header::after { content: ""; display: block; clear: both; }
+/* phones: a floated 231px portrait leaves no room for the surname beside it, so wrap like the hacker header (text, then photo) */
+@media (max-width: 600px) { body[data-theme="web1"] { --header-display: flex; } body[data-theme="web1"] .portrait-box { float: none; margin: 0; } body[data-theme="web1"] header::after { display: none; } }
 .gallery { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; }
 @media (max-width: 600px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } .gallery a.fig:last-child { grid-column: span 2; } }
 @media (max-width: 600px) { .gallery.two a.fig:last-child { grid-column: auto; } }
