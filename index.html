@@ -246,7 +246,7 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
   <section id="github" data-screen-label="GitHub">
     <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>GitHub</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px">
-      <sc-for list="{{ repos }}" as="repo" hint-placeholder-count="4">
+      <sc-for list="{{ repos }}" as="repo" hint-placeholder-count="3">
         <a href="{{ repo.url }}" style="display: block; border: var(--card-border); background: var(--card-bg); border-radius: var(--card-radius); padding: 12px 14px; text-decoration: none; color: var(--fg)" style-hover="border-color: #4ade80">
           <div style="display: flex; align-items: baseline; gap: 8px; justify-content: space-between">
             <span style="font-family: var(--mono-ui); font-weight: 700; color: var(--link)">{{ repo.name }}</span>
@@ -373,6 +373,7 @@ class Component extends DCLogic {
     repos: [
       { name: 'SpectralSequences/sseq', url: 'https://github.com/SpectralSequences/sseq', desc: 'The root repository for the SpectralSequences project.', lang: 'Rust', langColor: '#dea584', stars: '\u2014' },
       { name: 'JoeyBF/SeqSee', url: 'https://github.com/JoeyBF/SeqSee', desc: 'A generic visualization tool for spectral sequence data.', lang: 'Python', langColor: '#3572A5', stars: '\u2014' },
+      { name: 'JoeyBF/JoeyBF.github.io', url: 'https://github.com/JoeyBF/JoeyBF.github.io', desc: 'Personal website', lang: 'HTML', langColor: '#e34c26', stars: '\u2014' },
     ],
     events: [{ when: '\u2026', text: 'fetching from api.github.com\u2026' }],
     ghNote: 'live from the GitHub API \u2014',
@@ -535,22 +536,15 @@ class Component extends DCLogic {
       lang: r.language || 'misc', langColor: langColors[r.language] || '#7a857a',
       stars: String(r.stargazers_count),
     });
-    Promise.all([
-      fetch('https://api.github.com/repos/SpectralSequences/sseq').then(r => r.ok ? r.json() : null),
-      fetch('https://api.github.com/users/JoeyBF/repos?per_page=100&sort=updated').then(r => r.ok ? r.json() : null),
-    ]).then(([sseq, mine]) => {
-      if (!sseq && !mine) throw new Error('rate limited');
-      let repos = [];
-      if (sseq) repos.push(fmtRepo(sseq));
-      if (Array.isArray(mine)) {
-        repos = repos.concat(
-          mine.filter(r => !r.fork)
-            .sort((a, b) => b.stargazers_count - a.stargazers_count)
-            .slice(0, 3).map(fmtRepo)
-        );
-      }
-      if (repos.length) this.setState({ repos: repos.slice(0, 4) });
-    }).catch(() => {});
+    // a fixed list, in this order; only the live details (stars, description) come from the API
+    const SHOWN_REPOS = ['SpectralSequences/sseq', 'JoeyBF/SeqSee', 'JoeyBF/JoeyBF.github.io'];
+    Promise.all(SHOWN_REPOS.map(name =>
+      fetch('https://api.github.com/repos/' + name).then(r => r.ok ? r.json() : null).catch(() => null)
+    )).then(found => {
+      if (!found.some(Boolean)) return;
+      const repos = SHOWN_REPOS.map((name, i) => found[i] ? fmtRepo(found[i]) : this.state.repos.find(r => r.name === name)).filter(Boolean);
+      this.setState({ repos });
+    });
     fetch('https://api.github.com/users/JoeyBF/events/public?per_page=30')
       .then(r => { if (!r.ok) throw new Error('nope'); return r.json(); })
       .then(evs => {
