@@ -382,6 +382,7 @@ class Component extends DCLogic {
     this.startBg();
     this.setupSpy();
     this.setupKeys();
+    this.setupLightbox();
     this.fetchGitHub();
   }
   componentDidUpdate() {
@@ -394,6 +395,7 @@ class Component extends DCLogic {
     if (this._cleanup) this._cleanup();
     if (this._spy) this._spy.disconnect();
     if (this._onKey) window.removeEventListener('keydown', this._onKey);
+    if (this._lbCleanup) this._lbCleanup();
   }
   applyTheme(theme) {
     document.body.dataset.theme = document.documentElement.dataset.theme = theme;
@@ -418,6 +420,87 @@ class Component extends DCLogic {
       else if (e.key === 'Escape' && this.state.termOpen) this.closeTerm();
     };
     window.addEventListener('keydown', this._onKey);
+  }
+  // Figures: a plain click zooms the thumbnail into a centered view; any click, Esc or scroll zooms it back.
+  // Modified clicks (new tab, etc.) and no-JS still follow the link to the full image.
+  setupLightbox() {
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ms = () => ((this.props.motion ?? true) && !reduced) ? 280 : 0;
+    let open = null; // { link, thumb, overlay, big }
+    // where the picture actually sits inside its letterboxed (object-fit: contain) thumbnail
+    const shown = (img) => {
+      const r = img.getBoundingClientRect(), cs = getComputedStyle(img);
+      const bx = parseFloat(cs.borderLeftWidth) + parseFloat(cs.paddingLeft), by = parseFloat(cs.borderTopWidth) + parseFloat(cs.paddingTop);
+      const w = img.clientWidth, h = img.clientHeight, ratio = img.naturalWidth / img.naturalHeight || w / h;
+      const fw = Math.min(w, h * ratio), fh = fw / ratio;
+      return { left: r.left + bx + (w - fw) / 2, top: r.top + by + (h - fh) / 2, width: fw, height: fh };
+    };
+    const target = (img) => {
+      const ratio = img.naturalWidth / img.naturalHeight, pad = Math.min(32, window.innerWidth * 0.04);
+      const maxW = Math.min(window.innerWidth - 2 * pad, img.naturalWidth), maxH = Math.min(window.innerHeight - 2 * pad, img.naturalHeight);
+      const w = Math.min(maxW, maxH * ratio), h = w / ratio;
+      return { left: (window.innerWidth - w) / 2, top: (window.innerHeight - h) / 2, width: w, height: h };
+    };
+    const flip = (from, to) => `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`;
+    const close = () => {
+      if (!open) return;
+      const { link, thumb, overlay, big } = open; open = null;
+      const d = ms(), end = shown(thumb), now = big.getBoundingClientRect();
+      const done = () => { overlay.remove(); thumb.style.visibility = ''; link.focus({ preventScroll: true }); };
+      if (!d) return done();
+      big.style.transform = flip(end, { left: now.left, top: now.top, width: now.width, height: now.height });
+      overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+      setTimeout(done, d);
+    };
+    const show = (link) => {
+      const thumb = link.querySelector('img');
+      if (!thumb || !thumb.naturalWidth) return false;
+      const d = ms(), start = shown(thumb), end = target(thumb), cs = getComputedStyle(thumb);
+      const web1 = document.documentElement.dataset.theme === 'web1';
+      const overlay = document.createElement('div');
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', thumb.alt || 'figure');
+      overlay.tabIndex = -1;
+      overlay.style.cssText = `position: fixed; inset: 0; z-index: 2147483000; cursor: zoom-out; outline: none; background-color: rgba(0,0,0,0); transition: background-color ${d}ms ease`;
+      const big = document.createElement('img');
+      big.src = thumb.currentSrc || thumb.src;
+      big.alt = thumb.alt;
+      big.style.cssText = `position: fixed; left: ${end.left}px; top: ${end.top}px; width: ${end.width}px; height: ${end.height}px; max-width: none; margin: 0; box-sizing: border-box;` +
+        ` background: ${cs.backgroundColor}; filter: ${cs.filter}; border: ${cs.borderTopWidth} solid ${web1 ? '#999' : 'var(--rule, #2a332b)'}; border-radius: ${cs.borderTopLeftRadius};` +
+        ` transform-origin: 0 0; transform: ${flip(start, end)}; transition: transform ${d}ms cubic-bezier(.2,.7,.2,1); box-shadow: 0 10px 40px rgba(0,0,0,.45)`;
+      overlay.appendChild(big);
+      // attach outside <body> so the runtime's re-renders can't drop it
+      document.documentElement.appendChild(overlay);
+      thumb.style.visibility = 'hidden';
+      open = { link, thumb, overlay, big };
+      overlay.addEventListener('click', close);
+      overlay.focus({ preventScroll: true });
+      big.getBoundingClientRect(); // commit the start frame before animating
+      requestAnimationFrame(() => {
+        big.style.transform = 'none';
+        overlay.style.backgroundColor = web1 ? 'rgba(128,128,128,0.6)' : 'rgba(5,7,6,0.82)';
+      });
+      return true;
+    };
+    const onClick = (e) => {
+      const link = e.target.closest && e.target.closest('a.fig');
+      if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (show(link)) e.preventDefault();
+    };
+    const onKey = (e) => { if (open && e.key === 'Escape') { e.stopPropagation(); close(); } };
+    const onAway = () => close();
+    document.addEventListener('click', onClick);
+    window.addEventListener('keydown', onKey, true);
+    window.addEventListener('scroll', onAway, { passive: true });
+    window.addEventListener('resize', onAway);
+    this._lbCleanup = () => {
+      close();
+      document.removeEventListener('click', onClick);
+      window.removeEventListener('keydown', onKey, true);
+      window.removeEventListener('scroll', onAway);
+      window.removeEventListener('resize', onAway);
+    };
   }
   matrixBurst() {
     this._matrixUntil = performance.now() + 7000;
