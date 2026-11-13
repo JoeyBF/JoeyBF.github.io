@@ -79,14 +79,15 @@ body[data-theme="web1"] {
 html, body { margin: 0; padding: 0; background: var(--bg); }
 html[data-theme="web1"], html:has(> body[data-theme="web1"]) { background: #ffffff; }
 body { font-family: var(--body-font); color: var(--fg); }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 40px; }
 a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
 a:visited { color: var(--visited); }
 a.ref { text-decoration-style: dotted; }
 a:hover { color: var(--link-hover); }
 body:not([data-theme="web1"]) a:hover { background: rgba(74,222,128,0.14); }
 body:not([data-theme="web1"]) ::selection { background: #4ade80; color: #0b0d0c; }
-@media (max-width: 1240px) { [data-sidebar] { display: none !important; } }
+/* sidebar is 111px wide at left: max(24px, 50% - 555px); the 720px column starts at 50% - 360px, so it keeps a ~30px+ gap (after the scrollbar) down to 1060px */
+@media (max-width: 1059px) { [data-sidebar] { display: none !important; } }
 body[data-theme="web1"] .portrait-box { float: right; margin: 0 0 8px 16px; }
 body[data-theme="web1"] header::after { content: ""; display: block; clear: both; }
 /* phones: a floated 231px portrait leaves no room for the surname beside it, so wrap like the hacker header (text, then photo) */
