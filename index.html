@@ -150,7 +150,7 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
   <section id="now" data-screen-label="Now">
     <h2 style="color: var(--bright); font-size: var(--h2-fs); margin: var(--h2-margin); font-weight: 700"><span style="display: var(--hacker-only); color: var(--accent)">## </span>Now</h2>
     <ul style="margin: var(--ul-margin); padding-left: var(--ul-pad); display: var(--ul-display); flex-direction: column; gap: var(--li-gap)">
-      <li>Finished November 5, 2026: the Adams E&#8322; page of the sphere at p&nbsp;=&nbsp;2 through <strong style="color: var(--bright)">stem 400</strong> (s&nbsp;&le;&nbsp;202), well past the previous best chart (Wu, t&nbsp;&le;&nbsp;350). It took a 37-day, ~25,000 GPU-hour run on up to 45 GPUs of four kinds, on <a class="ref" href="https://computing.wayne.edu/hpc">Wayne State&rsquo;s HPC Grid</a>. <a href="#talks">Talk</a> and <a href="#projects">chart</a>. Next up: products and the d&#8322; differentials.</li>
+      <li>Finished November 5, 2026: the Adams E&#8322; page of the sphere at p&nbsp;=&nbsp;2 through <strong style="color: var(--bright)">stem 400</strong> (s&nbsp;&le;&nbsp;202), well past the previous best chart (Wu, t&nbsp;&le;&nbsp;350). <a href="#talks">Talk</a> and <a href="#projects">chart</a>. Next up: products and the d&#8322; differentials.</li>
       <li>Lead developer of the <a href="https://github.com/SpectralSequences/sseq">SpectralSequences project</a> &mdash; high-performance machinery for computational stable homotopy theory.</li>
       <li>Building <a href="https://github.com/JoeyBF/SeqSee">SeqSee</a>, an interactive spectral sequence visualizer used by top researchers in the field.</li>
       <li>Freshly minted PhD (2025), open to interesting problems &mdash; especially if they involve high performance and lots of hardware.</li>
@@ -169,7 +169,6 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
           <span style="color: var(--dim); font-size: var(--meta-fs); font-family: var(--mono-ui)">Rust &middot; CUDA &middot; built on sseq &middot; 2026</span>
         </div>
         <p style="margin: 8px 0 0">Computing the <a class="ref" href="https://en.wikipedia.org/wiki/Homotopy_groups_of_spheres">stable homotopy groups of spheres</a> is arguably the most central problem in stable homotopy theory. The best tool for it, the <a class="ref" href="https://en.wikipedia.org/wiki/Adams_spectral_sequence">Adams spectral sequence</a>, starts from a table (its E&#8322; page) with a long tradition of being pushed further and further. This run pushes it through stem 400, far past the previous best.</p>
-        <p style="margin: 8px 0 0; color: var(--dim)">In all: 37 days, up to 45 GPUs, ~18 quadrillion Milnor products and ~1.2 sextillion bit operations of row reduction.</p>
         <ul style="margin: var(--ul-margin); padding-left: var(--ul-pad); display: var(--ul-display); flex-direction: column; gap: 6px; margin-top: 8px">
           <li>Distributed the core algorithm across up to 45 GPUs of four kinds (H200, L40S, V100, A30) on a shared HPC cluster: one coordinator, stateless workers scheduled through <a class="ref" href="https://slurm.schedmd.com/">Slurm</a>, row reduction as a service. On a benchmark workload: <strong style="color: var(--bright)">205.5&nbsp;h on one node &rarr; 28.3&nbsp;h on 23 GPUs</strong>.</li>
           <li>Found structure in the mathematics that exposes far more parallel work. Inside each step, the dependency graph grows exponentially wide but only polynomially deep. Between steps, the algebra allows a relaxation that halves the critical path. Together they took the run from ~20 GPUs&rsquo; worth of parallelism to ~190.</li>
@@ -178,6 +177,17 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
           <li>Traded storage for recompute: <strong style="color: var(--bright)">12&nbsp;PB projected on disk &rarr; ~100&nbsp;GB</strong>, and faster, because the parallel filesystem had been the bottleneck. Peak memory went from over 700&nbsp;GB (out-of-memory kills) to 45&nbsp;GB.</li>
           <li>Fault-tolerant on a shared cluster: over the 37-day run, workers came and went as their allocations ended and restarted, with checkpoint/restart throughout, and the coordinator was upgraded live ~20 times without losing completed work.</li>
         </ul>
+        <div style="color: var(--bright); font-weight: 700; font-variant-caps: all-small-caps; letter-spacing: 0.06em; font-size: var(--fs); font-family: var(--mono-ui); margin-top: 14px">Impressive big numbers</div>
+        <dl style="display: var(--dl-display); grid-template-columns: 110px 1fr; gap: 6px 20px; margin: 6px 0 0; font-size: var(--small-fs)">
+          <dt style="color: var(--dim); font-family: var(--mono-ui)">hardware</dt>
+          <dd style="margin: var(--dd-margin)">up to 45 GPUs of four kinds, on <a class="ref" href="https://computing.wayne.edu/hpc">Wayne State&rsquo;s HPC Grid</a></dd>
+          <dt style="color: var(--dim); font-family: var(--mono-ui)">compute</dt>
+          <dd style="margin: var(--dd-margin)">~25,000 GPU-hours, ~18 quadrillion Milnor products and ~1.2 sextillion bit operations of row reduction over the 37-day run</dd>
+          <dt style="color: var(--dim); font-family: var(--mono-ui)">peak</dt>
+          <dd style="margin: var(--dd-margin)">10.5 TB of memory held across 17 nodes; the resolution itself is ~100 GB on disk</dd>
+          <dt style="color: var(--dim); font-family: var(--mono-ui)">code</dt>
+          <dd style="margin: var(--dd-margin)">45k &rarr; 129k lines of Rust and CUDA, June to October; 1,200+ commits, 54 upstream pull requests</dd>
+        </dl>
         <div class="gallery">
           <a class="fig" href="img/census-node-vs-fleet.png" target="_blank" rel="noopener"><img src="img/thumb/census-node-vs-fleet.webp" alt="Stems 0 to 300 with s up to 202: 205.5 hours on one 4-GPU node versus 28.3 hours on 23 GPUs (8 H200 and 15 L40S)" loading="lazy" />one node vs 23 GPUs</a>
           <a class="fig" href="img/n400-work-progress.png" target="_blank" rel="noopener"><img src="img/thumb/n400-work-progress.webp" alt="Share of the work done against share of bidegrees completed, October 4 to November 5: work climbs steadily through October, while most bidegrees finish only after October 29" loading="lazy" />work, not bidegrees</a>
@@ -297,16 +307,6 @@ body:not([data-theme="web1"]) a.fig:hover img { border-color: var(--accent); }
       <div style="color: var(--dim); font-size: var(--small-fs); margin-top: 3px">Topology seminar &middot; Wayne State University &middot; October 27, 2026 &middot; 70 min with Q&amp;A &middot; <a href="https://youtu.be/5b8YDziWjAo" style="font-family: var(--mono-ui)">video&nbsp;&rarr;</a> &middot; <a href="Ext400/" style="font-family: var(--mono-ui)">slides&nbsp;&rarr;</a></div>
       <p style="margin: 6px 0 0">It is well known that the best tool for computing the stable stems is the Adams spectral sequence, which starts from the cohomology of the Steenrod algebra. It is known in a large range, with a long tradition of computing it further and further. In practice, this only requires hardware and patience. I had neither.</p>
       <p style="margin: 6px 0 0">This talk is the story of how I kept upgrading my implementation of the ext resolver from sseq over the last several months. I start from a local run on my computer, go through several rounds of finding and fixing bottlenecks, and end up using a significant chunk of Wayne State&rsquo;s High Performance Computing cluster. Expect charts and live demos. No HPC experience required.</p>
-      <dl style="display: var(--dl-display); grid-template-columns: 110px 1fr; gap: 6px 20px; margin: 12px 0 0; font-size: var(--small-fs)">
-        <dt style="color: var(--dim); font-family: var(--mono-ui)">progress</dt>
-        <dd style="margin: var(--dd-margin)">100%, completed 2026-11-05: 81,002 bidegrees, 253,204 generators</dd>
-        <dt style="color: var(--dim); font-family: var(--mono-ui)">compute</dt>
-        <dd style="margin: var(--dd-margin)">~25,000 GPU-hours, ~18 quadrillion Milnor products and ~1.2 sextillion bit operations of row reduction over the 37-day run</dd>
-        <dt style="color: var(--dim); font-family: var(--mono-ui)">peak</dt>
-        <dd style="margin: var(--dd-margin)">10.5 TB of memory held across 17 nodes; the resolution itself is ~100 GB on disk</dd>
-        <dt style="color: var(--dim); font-family: var(--mono-ui)">code</dt>
-        <dd style="margin: var(--dd-margin)">45k &rarr; 129k lines of Rust and CUDA, June to October; 1,200+ commits, 54 upstream pull requests</dd>
-      </dl>
     </article>
   </section>
 
