@@ -35,6 +35,9 @@
   "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "./vendor/react.production.min.js",
   "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "./vendor/react-dom.production.min.js"
 };</script>
+<!-- paint the theme background from the first frame: the page's own styles only apply once the runtime has rendered -->
+<script>try { if (localStorage.getItem('joeybf-theme') === 'web1') document.documentElement.dataset.theme = 'web1'; } catch (e) {}</script>
+<style>html { background: #0b0d0c; } html[data-theme="web1"] { background: #ffffff; }</style>
 <script src="./support.js"></script>
 </head>
 <body>
